@@ -38,7 +38,7 @@ resource "terraform_data" "bootstrap" {
   destination = "/tmp/bootstrap.sh"
   }
   #then execute the script file
-  provisioner "local-exec" {
+  provisioner "remote-exec" {
     #inline block we used for run the multiple commands
     inline = [
       #giving the execute permissions to bootstrap.sh file
