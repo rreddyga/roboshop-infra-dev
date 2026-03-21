@@ -41,7 +41,7 @@ resource "terraform_data" "bootstrap" {
     #inline block we used for run the multiple commands
     inline = [
       #giving the execute permissions to bootstrap.sh file
-      "chmod +x /tmp/bootstrap.sh"
+      "chmod +x /tmp/bootstrap.sh",
       #run the script file
       "sudo sh /tmp/bootstrap.sh"
     ]
