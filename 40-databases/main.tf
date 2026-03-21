@@ -14,6 +14,7 @@ resource "aws_instance" "mongodb" {
     },
     local.common_tags
   )
+}
 
 #we are using terraform data
 
