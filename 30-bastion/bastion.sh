@@ -1,31 +1,30 @@
 #!/bin/bash
 yum update -y
 
-# Detect NVMe device (root disk)
-ROOT_DISK=$(lsblk -dno NAME,SIZE,MOUNTPOINT | grep '[0-9]\+G /$' | awk '{print "/dev/" $1}')
-if [ -z "$ROOT_DISK" ]; then
-  echo "Root disk not found!"
-  exit 1
-fi
-echo "Resizing $ROOT_DISK..."
+# Find root disk and LVM partition dynamically
+ROOT_DISK=$(lsblk -no NAME,MOUNTPOINT | grep '/$' | awk '{print $1}')
+echo "Found root disk: $ROOT_DISK"
 
-# Install tools if needed
+# List partitions to identify LVM PV (usually p2/p3)
+lsblk $ROOT_DISK
+PART_NUM=$(pvs --noheadings -o pv_name | grep $ROOT_DISK | awk '{print $1}' | sed "s|$ROOT_DISK||")
+echo "LVM partition: $ROOT_DISK$PART_NUM"
+
+# Safe resize sequence
 yum install -y cloud-utils-growpart lvm2 xfsprogs
+growpart $ROOT_DISK $PART_NUM
+pvresize $ROOT_DISK$PART_NUM
+lvextend -l +100%FREE /dev/RootVG/homeVol
+xfs_growfs /home
 
-# Extend partition (p3 for LVM PV on RHEL; common GPT layout)
-growpart "$ROOT_DISK" 3
+df -h /home
+lvs
 
-# Rescan PV, extend VG/LV, resize FS (root usually /dev/mapper/RootVG-rootVol or home)
-pvresize "$ROOT_DISK"p3
-lvextend -l +100%FREE -r /dev/RootVG/rootVol  # Adjust LV if /home: /dev/RootVG-homeVol
-# For /home specifically: lvextend -l +100%FREE -r /dev/mapper/RootVG-homeVol
+echo 'export TF_CLI_ARGS="-no-color"' >> /root/.bashrc
+echo 'ulimit -v unlimited' >> /root/.bashrc
 
-# Verify
-df -h / /home
-lsblk
 
-# Install Terraform
+# Terraform install
 yum install -y yum-utils
 yum-config-manager --add-repo https://rpm.releases.hashicorp.com/RHEL/hashicorp.repo
 yum -y install terraform
-terraform --version
