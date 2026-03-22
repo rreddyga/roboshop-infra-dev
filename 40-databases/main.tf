@@ -21,6 +21,7 @@ resource "aws_instance" "mongodb" {
 resource "terraform_data" "bootstrap" {
   triggers_replace = [
     aws_instance.mongodb.id,
+    timestamp()
     #aws_instance.database.id
   ]
   #we need to take the connections by using connections block
