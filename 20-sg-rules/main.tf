@@ -52,3 +52,15 @@ resource "aws_security_group_rule" "redis_bastion" {
   source_security_group_id =local.bastion_sg_id
   security_group_id = local.redis_sg_id
 }
+
+#mysql-bastion
+
+resource "aws_security_group_rule" "mysql_bastion" {
+  type              = "ingress"
+  from_port         = 22
+  to_port           = 22
+  protocol          = "tcp"
+  #cidr_blocks       = [aws_vpc.example.cidr_block]
+  source_security_group_id =local.bastion_sg_id
+  security_group_id = local.mysql_sg_id
+}
