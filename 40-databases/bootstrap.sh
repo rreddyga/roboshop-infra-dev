@@ -2,7 +2,7 @@
 component=$1
 
 # Use dnf for RHEL9 (not yum)
-sudo dnf install ansibile -y
+sudo dnf install ansible -y
 
 cd /home/ec2-user
 
