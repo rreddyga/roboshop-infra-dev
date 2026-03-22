@@ -37,6 +37,7 @@ resource "terraform_data" "bootstrap" {
   source = "bootstrap.sh"
   destination = "/tmp/bootstrap.sh"
   }
+  
   #then execute the script file
   provisioner "remote-exec" {
     #inline block we used for run the multiple commands
@@ -44,7 +45,7 @@ resource "terraform_data" "bootstrap" {
       #giving the execute permissions to bootstrap.sh file
       "chmod +x /tmp/bootstrap.sh",
       #run the script file
-      "sudo sh /tmp/bootstrap.sh"
+      "sudo sh /tmp/bootstrap.sh mongodb"
     ]
   }
 }
