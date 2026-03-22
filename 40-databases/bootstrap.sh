@@ -8,4 +8,4 @@ git clone https://github.com/rreddyga/ansible-roboshop-roles-tf.git
 #change the directory to ansible-roboshop-roles-tf
 cd ansible-roboshop-roles-tf
 #run the ansible playbook
-ansible-playbook -e component=$component roboshop.yml
+ansible-playbook -e component=$component roboshop.yaml
