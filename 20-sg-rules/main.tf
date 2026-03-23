@@ -81,8 +81,8 @@ resource "aws_security_group_rule" "rabbitmq_bastion" {
 #backend-alb-bastion
 resource "aws_security_group_rule" "backend_alb_bastion" {
   type              = "ingress"
-  from_port         = 22
-  to_port           = 22
+  from_port         = 80
+  to_port           = 80
   protocol          = "tcp"
   #cidr_blocks       = [aws_vpc.example.cidr_block]
   source_security_group_id =local.bastion_sg_id
