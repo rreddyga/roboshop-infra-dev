@@ -200,7 +200,7 @@ resource "terraform_data" "bootstrap-rabbitmq" {
   destination = "/tmp/bootstrap.sh"
   }
 
-  #then execute the script file
+#then execute the script file
   provisioner "remote-exec" {
     #inline block we used for run the multiple commands
     inline = [
