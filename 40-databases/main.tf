@@ -51,7 +51,7 @@ resource "terraform_data" "bootstrap" {
   }
 }
 
-#redis 
+#redis
 resource "aws_instance" "redis" {
   ami           = local.ami_id
   instance_type = "t3.micro"
